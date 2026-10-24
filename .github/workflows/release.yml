@@ -1,24 +1,32 @@
 name: Release
 
-# Publishing a GitHub release tagged with the version (e.g. v1.0.0) attaches an installable module.json and
-# module.zip to it. The manifest URL in module.json always points at the latest release.
+# Pushing a version tag (e.g. v1.0.0) creates a GitHub release with an installable module.json and module.zip
+# attached. Publishing a release from the GitHub UI attaches the same files to it. The manifest URL in
+# module.json always points at the latest release.
 on:
+  push:
+    tags: ["v*"]
   release:
     types: [published]
 
 permissions:
   contents: write
 
+# A release created in the UI can fire both events for the same tag; handle them one at a time
+concurrency:
+  group: release-${{ github.event.release.tag_name || github.ref_name }}
+
 jobs:
   package:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || github.ref_name }}
+      REPO: ${{ github.repository }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Stamp version and download URL into module.json
-        env:
-          TAG: ${{ github.event.release.tag_name }}
-          REPO: ${{ github.repository }}
         run: |
           VERSION="${TAG#v}"
           jq --arg version "$VERSION" \
@@ -31,8 +39,10 @@ jobs:
       - name: Build module.zip
         run: zip -r module.zip module.json README.md lang scripts styles templates
 
-      - name: Attach to release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.event.release.tag_name }}
-        run: gh release upload "$TAG" module.json module.zip --clobber
+      - name: Create the release, or attach to the existing one
+        run: |
+          if gh release view "$TAG" --repo "$REPO" > /dev/null 2>&1; then
+            gh release upload "$TAG" module.json module.zip --repo "$REPO" --clobber
+          else
+            gh release create "$TAG" module.json module.zip --repo "$REPO" --title "$TAG" --generate-notes --verify-tag
+          fi

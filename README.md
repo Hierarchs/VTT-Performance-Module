@@ -111,14 +111,21 @@ libWrapper is optional. When it's active, Performance Overhaul registers its one
 
 ## Publishing a release
 
-The workflow in `.github/workflows/release.yml` runs when you publish a GitHub release. Tag the release with
-the version, for example `v1.0.0`. The workflow then:
+Push a version tag:
+
+```bash
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+The workflow in `.github/workflows/release.yml` then:
 
 1. stamps that version and the release URLs into `module.json`
 2. builds `module.zip`
-3. attaches both files to the release
+3. creates the GitHub release with both files attached
 
-The manifest URL above then serves the newest release.
+Publishing a release from the GitHub website with a new version tag works too; the workflow attaches the
+files to it. Either way, the manifest URL above then serves the newest release.
 
 ## Things to know
 

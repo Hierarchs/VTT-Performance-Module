@@ -1,0 +1,31 @@
+{
+  "id": "performance-overhaul",
+  "title": "Performance Overhaul",
+  "description": "Makes Foundry VTT lighter on your hardware: an adaptive frame limiter that stops the canvas burning GPU while nobody is interacting, quiet background preloading of upcoming scenes, a per-module hook profiler to find what is slowing your game down, and a one-click settings optimizer with a health report.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Hierarchs"
+    }
+  ],
+  "url": "https://github.com/Hierarchs/VTT-Performance-Module",
+  "manifest": "https://github.com/Hierarchs/VTT-Performance-Module/releases/latest/download/module.json",
+  "download": "https://github.com/Hierarchs/VTT-Performance-Module/releases/latest/download/module.zip",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/performance-overhaul.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}

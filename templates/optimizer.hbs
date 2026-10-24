@@ -1,0 +1,59 @@
+<div class="perf-overhaul-body">
+  <section class="perf-section">
+    <header class="perf-section-header">
+      <h3>{{localize "PERFOVERHAUL.Optimizer.HealthTitle"}}</h3>
+      <button type="button" class="icon" data-action="refresh" data-tooltip="{{localize "PERFOVERHAUL.Optimizer.Refresh"}}"><i class="fa-solid fa-arrows-rotate"></i></button>
+    </header>
+    <ul class="perf-checks">
+      {{#each checks}}
+      <li class="perf-check perf-check-{{level}}">
+        <i class="{{icon}}"></i>
+        <div>
+          <strong>{{title}}</strong>
+          <p>{{detail}}</p>
+        </div>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <section class="perf-section">
+    <h3>{{localize "PERFOVERHAUL.Optimizer.PresetsTitle"}}</h3>
+    <p class="hint">{{localize "PERFOVERHAUL.Optimizer.PresetsHint"}}</p>
+    <div class="perf-presets">
+      {{#each presets}}
+      <div class="perf-preset {{#if current}}perf-preset-current{{/if}}">
+        <h4><i class="{{icon}}"></i> {{label}}</h4>
+        <p>{{hint}}</p>
+        <button type="button" data-action="applyPreset" data-preset="{{id}}" {{#if current}}disabled{{/if}}>
+          {{#if current}}{{localize "PERFOVERHAUL.Optimizer.Current"}}{{else}}{{localize "PERFOVERHAUL.Optimizer.Apply"}}{{/if}}
+        </button>
+      </div>
+      {{/each}}
+    </div>
+
+    <table class="perf-table perf-compare">
+      <thead>
+        <tr>
+          <th class="perf-name">{{localize "PERFOVERHAUL.Optimizer.Setting"}}</th>
+          <th>{{localize "PERFOVERHAUL.Optimizer.Now"}}</th>
+          {{#each presets}}<th>{{label}}</th>{{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rows}}
+        <tr>
+          <td class="perf-name">{{label}}</td>
+          <td>{{current}}</td>
+          {{#each presets}}<td class="{{#if changed}}perf-changed{{/if}}">{{value}}</td>{{/each}}
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="perf-footer">
+    <button type="button" data-action="profiler"><i class="fa-solid fa-stopwatch"></i> {{localize "PERFOVERHAUL.Optimizer.OpenProfiler"}}</button>
+    <button type="button" data-action="hud"><i class="fa-solid fa-gauge-high"></i> {{#if hudEnabled}}{{localize "PERFOVERHAUL.Optimizer.HideHud"}}{{else}}{{localize "PERFOVERHAUL.Optimizer.ShowHud"}}{{/if}}</button>
+  </footer>
+</div>

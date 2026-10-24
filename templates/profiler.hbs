@@ -1,0 +1,107 @@
+<div class="perf-overhaul-body">
+  <header class="perf-toolbar">
+    {{#if active}}
+    <button type="button" data-action="stop"><i class="fa-solid fa-stop"></i> {{localize "PERFOVERHAUL.Profiler.Stop"}}</button>
+    <span class="perf-recording"><i class="fa-solid fa-circle"></i> {{localize "PERFOVERHAUL.Profiler.Recording" duration=duration}}</span>
+    {{else}}
+    <button type="button" data-action="start"><i class="fa-solid fa-play"></i> {{localize "PERFOVERHAUL.Profiler.Start"}}</button>
+    {{/if}}
+    <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> {{localize "PERFOVERHAUL.Profiler.Reset"}}</button>
+    <button type="button" data-action="copy" {{#unless hasData}}disabled{{/unless}}><i class="fa-solid fa-copy"></i> {{localize "PERFOVERHAUL.Profiler.Copy"}}</button>
+  </header>
+
+  <div class="perf-scroll">
+    {{#if hasData}}
+    <p class="perf-summary">{{localize "PERFOVERHAUL.Profiler.Summary" duration=duration total=totalSelf pct=totalPct}}</p>
+
+    <h3>{{localize "PERFOVERHAUL.Profiler.ByPackage"}}</h3>
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th class="perf-name">{{localize "PERFOVERHAUL.Profiler.Package"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.SelfTime"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Share"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Calls"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Worst"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each packages}}
+        <tr class="{{severity}}">
+          <td class="perf-name">
+            <div class="perf-bar" style="width: {{bar}}%"></div>
+            <span>{{label}}{{#if guessed}} <i class="fa-solid fa-circle-question" data-tooltip="{{localize "PERFOVERHAUL.Profiler.GuessedHint"}}"></i>{{/if}}</span>
+          </td>
+          <td>{{self}} ms</td>
+          <td>{{pct}}%</td>
+          <td>{{calls}}</td>
+          <td>{{max}} ms</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <h3>{{localize "PERFOVERHAUL.Profiler.SlowestHandlers"}}</h3>
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th class="perf-name">{{localize "PERFOVERHAUL.Profiler.Package"}}</th>
+          <th class="perf-name">{{localize "PERFOVERHAUL.Profiler.Hook"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.SelfTime"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Calls"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Average"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Worst"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each handlers}}
+        <tr class="{{severity}}">
+          <td class="perf-name">{{label}}{{#if guessed}} <i class="fa-solid fa-circle-question" data-tooltip="{{localize "PERFOVERHAUL.Profiler.GuessedHint"}}"></i>{{/if}}</td>
+          <td class="perf-name"><code>{{hook}}</code> <span class="perf-fn">{{name}}</span></td>
+          <td>{{self}} ms</td>
+          <td>{{calls}}</td>
+          <td>{{avg}} ms</td>
+          <td>{{max}} ms</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    {{#if renders.length}}
+    <h3>{{localize "PERFOVERHAUL.Profiler.RendersTitle"}}</h3>
+    <p class="hint">{{localize "PERFOVERHAUL.Profiler.RendersHint"}}</p>
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th class="perf-name">{{localize "PERFOVERHAUL.Profiler.Application"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Renders"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Average"}}</th>
+          <th>{{localize "PERFOVERHAUL.Profiler.Worst"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each renders}}
+        <tr class="{{severity}}">
+          <td class="perf-name">{{name}}</td>
+          <td>{{count}}</td>
+          <td>{{avg}} ms</td>
+          <td>{{max}} ms</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{/if}}
+
+    {{else}}
+    <div class="perf-empty">
+      <h3>{{localize "PERFOVERHAUL.Profiler.EmptyTitle"}}</h3>
+      <ol>
+        <li>{{localize "PERFOVERHAUL.Profiler.EmptyStep1"}}</li>
+        <li>{{localize "PERFOVERHAUL.Profiler.EmptyStep2"}}</li>
+        <li>{{localize "PERFOVERHAUL.Profiler.EmptyStep3"}}</li>
+      </ol>
+      <p class="hint">{{localize "PERFOVERHAUL.Profiler.EmptyNote"}}</p>
+    </div>
+    {{/if}}
+  </div>
+</div>

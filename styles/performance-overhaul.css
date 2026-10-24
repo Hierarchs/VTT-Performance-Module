@@ -1,0 +1,268 @@
+/* ------------------------------------------ */
+/*  Performance HUD                           */
+/* ------------------------------------------ */
+
+#perf-overhaul-hud {
+  position: fixed;
+  right: 340px;
+  bottom: 10px;
+  z-index: 100;
+  width: 250px;
+  background: rgba(10, 10, 14, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  color: #ecebe4;
+  font-family: var(--font-monospace, monospace);
+  font-size: 11px;
+  pointer-events: auto;
+  user-select: none;
+}
+
+#perf-overhaul-hud .perf-hud-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-body, sans-serif);
+  font-size: 12px;
+  font-weight: bold;
+  cursor: move;
+}
+
+#perf-overhaul-hud .perf-hud-header span {
+  flex: 1;
+}
+
+#perf-overhaul-hud .perf-hud-close {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+#perf-overhaul-hud .perf-hud-close:hover {
+  opacity: 1;
+}
+
+#perf-overhaul-hud .perf-hud-body {
+  padding: 4px 6px 6px;
+}
+
+#perf-overhaul-hud .perf-hud-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  line-height: 16px;
+}
+
+#perf-overhaul-hud .perf-hud-label {
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+#perf-overhaul-hud .perf-hud-value {
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#perf-overhaul-hud .mode-active { color: #8fdc6e; }
+#perf-overhaul-hud .mode-idle { color: #7cc4ff; }
+#perf-overhaul-hud .mode-background { color: #c8a2ff; }
+#perf-overhaul-hud .mode-off { opacity: 0.65; }
+
+/* ------------------------------------------ */
+/*  Shared window styles                      */
+/* ------------------------------------------ */
+
+.perf-overhaul .perf-overhaul-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.perf-overhaul h3 {
+  margin: 8px 0 4px;
+}
+
+.perf-overhaul .perf-table {
+  width: 100%;
+  margin: 0 0 8px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.perf-overhaul .perf-table th,
+.perf-overhaul .perf-table td {
+  padding: 2px 6px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.perf-overhaul .perf-table th.perf-name,
+.perf-overhaul .perf-table td.perf-name {
+  text-align: left;
+  white-space: normal;
+}
+
+.perf-overhaul .perf-table tbody tr:nth-child(odd) {
+  background: rgba(127, 127, 127, 0.08);
+}
+
+.perf-overhaul .perf-table tr.perf-warn td { color: #d9971f; }
+.perf-overhaul .perf-table tr.perf-bad td { color: #e0483e; font-weight: bold; }
+
+.perf-overhaul .perf-table code {
+  font-size: 11px;
+}
+
+/* ------------------------------------------ */
+/*  Profiler                                  */
+/* ------------------------------------------ */
+
+.perf-overhaul-profiler .perf-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.perf-overhaul-profiler .perf-toolbar button {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.perf-overhaul-profiler .perf-recording {
+  flex: 1;
+  color: #e0483e;
+  font-weight: bold;
+}
+
+.perf-overhaul-profiler .perf-recording i {
+  animation: perf-overhaul-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes perf-overhaul-pulse {
+  50% { opacity: 0.25; }
+}
+
+.perf-overhaul-profiler .perf-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.perf-overhaul-profiler .perf-name {
+  position: relative;
+}
+
+.perf-overhaul-profiler .perf-bar {
+  position: absolute;
+  inset: 2px auto 2px 0;
+  background: rgba(255, 120, 30, 0.22);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.perf-overhaul-profiler .perf-name span {
+  position: relative;
+}
+
+.perf-overhaul-profiler .perf-fn {
+  opacity: 0.65;
+  font-size: 11px;
+}
+
+.perf-overhaul-profiler .perf-empty ol {
+  margin: 4px 0 8px 18px;
+  line-height: 20px;
+}
+
+/* ------------------------------------------ */
+/*  Optimizer                                 */
+/* ------------------------------------------ */
+
+.perf-overhaul-optimizer .perf-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.perf-overhaul-optimizer .perf-section-header button {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.perf-overhaul-optimizer .perf-checks {
+  list-style: none;
+  margin: 4px 0;
+  padding: 0;
+}
+
+.perf-overhaul-optimizer .perf-check {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 4px 6px;
+  border-left: 3px solid transparent;
+}
+
+.perf-overhaul-optimizer .perf-check i {
+  margin-top: 2px;
+  width: 16px;
+  text-align: center;
+}
+
+.perf-overhaul-optimizer .perf-check p {
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+
+.perf-overhaul-optimizer .perf-check-critical { border-color: #e0483e; background: rgba(224, 72, 62, 0.1); }
+.perf-overhaul-optimizer .perf-check-critical i { color: #e0483e; }
+.perf-overhaul-optimizer .perf-check-warning { border-color: #d9971f; background: rgba(217, 151, 31, 0.1); }
+.perf-overhaul-optimizer .perf-check-warning i { color: #d9971f; }
+.perf-overhaul-optimizer .perf-check-info i { color: #4a95dc; }
+.perf-overhaul-optimizer .perf-check-ok i { color: #4caf50; }
+
+.perf-overhaul-optimizer .perf-presets {
+  display: flex;
+  gap: 8px;
+  margin: 6px 0 10px;
+}
+
+.perf-overhaul-optimizer .perf-preset {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  border: 1px solid rgba(127, 127, 127, 0.4);
+  border-radius: 4px;
+}
+
+.perf-overhaul-optimizer .perf-preset h4 {
+  margin: 0 0 4px;
+  font-weight: bold;
+}
+
+.perf-overhaul-optimizer .perf-preset p {
+  flex: 1;
+  margin: 0 0 6px;
+  font-size: 12px;
+}
+
+.perf-overhaul-optimizer .perf-preset-current {
+  border-color: #4caf50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.6);
+}
+
+.perf-overhaul-optimizer .perf-compare td.perf-changed {
+  font-weight: bold;
+  color: #4a95dc;
+}
+
+.perf-overhaul-optimizer .perf-footer {
+  display: flex;
+  gap: 8px;
+}

@@ -1,6 +1,7 @@
 import {MODULE_ID} from "./constants.mjs";
 import {FrameLimiter} from "./frame-limiter.mjs";
 import {PerfHud} from "./perf-hud.mjs";
+import {TokenUI} from "./token-ui.mjs";
 import {OptimizerApp} from "./optimizer-app.mjs";
 import {ProfilerApp} from "./profiler-app.mjs";
 
@@ -46,6 +47,17 @@ export function registerSettings() {
   register("idleDelay", {type: Number, default: 5, range: {min: 1, max: 60, step: 1}, onChange: reevaluate});
   register("backgroundFPS", {type: Number, default: 10, range: {min: 10, max: 60, step: 5}, onChange: reevaluate});
   register("smoothVideo", {type: Boolean, default: true, onChange: reevaluate});
+
+  // Token UI
+  register("tokenBarCache", {type: Boolean, default: true});
+  register("tokenEffectCache", {type: Boolean, default: true});
+  register("tokenUiBatching", {
+    type: Boolean,
+    default: true,
+    onChange: enabled => {
+      if ( !enabled ) TokenUI.flushAll();
+    }
+  });
 
   // World load
   register("chatBatchSize", {type: Number, default: 30, range: {min: 10, max: 100, step: 5}, requiresReload: true});

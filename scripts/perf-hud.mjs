@@ -1,6 +1,7 @@
 import {MODULE_ID, clamp, getSetting} from "./constants.mjs";
 import {FrameLimiter} from "./frame-limiter.mjs";
 import {ScenePreloader} from "./scene-preloader.mjs";
+import {TokenUI} from "./token-ui.mjs";
 
 const LONG_TASK_WINDOW_MS = 10000;
 const DOM_COUNT_INTERVAL_MS = 5000;
@@ -141,6 +142,7 @@ export class PerfHud {
     const preload = ScenePreloader.status;
     const textureMB = foundry.canvas.TextureLoader?.approximateTotalMemoryUsage;
     const count = layer => layer?.placeables?.length ?? 0;
+    const tokenUI = TokenUI.stats;
 
     const rows = [
       [i18n("FPS"), `${fps.toFixed(0)} / ${cap}`, `mode-${FrameLimiter.mode}`],
@@ -156,6 +158,7 @@ export class PerfHud {
         `${count(canvas.walls)} ${i18n("Walls")}`
       ].join(" · ") : "—"],
       [i18n("Sources"), effects ? `${effects.lightSources?.size ?? 0} ${i18n("Light")} · ${effects.visionSources?.size ?? 0} ${i18n("Vision")}` : "—"],
+      [i18n("TokenUI"), `${tokenUI.barsCached + tokenUI.effectsCached} ${i18n("Skipped")} · ${TokenUI.waiting} ${i18n("Waiting")}`],
       [i18n("Preload"), preload.total ? `${preload.loaded}/${preload.total} ${i18n("Scenes")}` : i18n("PreloadIdle")]
     ];
 

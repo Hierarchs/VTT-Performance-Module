@@ -12,7 +12,8 @@ const PACKAGE_PATTERN = /\/(modules|systems|worlds)\/([^/?#\s)]+)\//;
 /** Matches Foundry's own client scripts, such as /scripts/foundry.mjs */
 const CORE_PATTERN = /\/scripts\/[^/?#\s)]+\.m?js/;
 
-const SELF_FRAME = `/${MODULE_ID}/scripts/hook-profiler.mjs`;
+/** This script's own URL path, so its frames can be skipped wherever the module is installed. */
+const SELF_FRAME = new URL(import.meta.url).pathname;
 
 /**
  * @typedef {object} HandlerSource

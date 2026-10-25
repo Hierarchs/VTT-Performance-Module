@@ -4,6 +4,7 @@ import {registerSettings, registerKeybindings} from "./settings.mjs";
 import {FrameLimiter} from "./frame-limiter.mjs";
 import {PerfHud} from "./perf-hud.mjs";
 import {ScenePreloader} from "./scene-preloader.mjs";
+import {TokenUI} from "./token-ui.mjs";
 import {OptimizerApp} from "./optimizer-app.mjs";
 import {ProfilerApp} from "./profiler-app.mjs";
 
@@ -33,6 +34,7 @@ Hooks.once("init", () => {
 
   safely("frame limiter", () => FrameLimiter.initialize());
   safely("scene preloader", () => ScenePreloader.initialize());
+  safely("token UI", () => TokenUI.initialize());
   safely("performance HUD", () => PerfHud.initialize());
 
   game.modules.get(MODULE_ID).api = {
@@ -40,6 +42,7 @@ Hooks.once("init", () => {
     HookProfiler,
     PerfHud,
     ScenePreloader,
+    TokenUI,
     openOptimizer: () => new OptimizerApp().render({force: true}),
     openProfiler: () => new ProfilerApp().render({force: true})
   };

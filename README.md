@@ -24,6 +24,28 @@ renders a sixth. How much that saves overall depends on how much of your session
 It uses the same lever as core's Maximum Framerate setting, the PIXI ticker frame cap, so it doesn't replace
 any rendering code.
 
+### Token bar and effect caching
+Core redraws a token's resource bars, clearing and rebuilding their graphics, on most actor updates. That
+includes updates that have nothing to do with the bars. It also destroys and recreates every status effect
+icon on each effect redraw.
+
+- **Cache token resource bars:** the bars are only redrawn when something they show changes. That covers
+  the values, the attribute data behind them (so system extras such as temporary hit points still update),
+  the token's size, and its bar display mode.
+- **Cache token effects:** the icons are only rebuilt when the set of effects changes, or an effect's
+  image, tint, overlay state, or document changes.
+
+Both work on the system's own token class, so when a redraw is skipped, the system's drawing code is skipped
+along with core's. Neither half is ever left to run on its own.
+
+### Token UI render batching
+- Bar and effect redraws for tokens outside the visible area (with a margin), or hidden from you, wait until
+  the token comes into view. On big scenes, this also skips drawing every off-screen token's UI on load.
+- Overlapping effect redraws of one token, such as several conditions applied in a row, merge into a single
+  trailing redraw with the latest data, instead of rebuilding the icons once per change.
+
+Controlled and hovered tokens always draw immediately.
+
 ### Background scene preloading
 After a scene loads, the textures for the two nearest scenes in the navigation bar (the active scene first)
 load quietly in the background, one scene and one file at a time. Switching to them then skips the
@@ -86,6 +108,9 @@ your Foundry version doesn't have are skipped.
 | Idle After (Seconds) | 5 | |
 | Background Frame Rate | 10 | Raise to your max FPS if you stream the canvas |
 | Keep Video Smooth | On | 30 FPS floor while video plays |
+| Cache Token Resource Bars | On | |
+| Cache Token Effects | On | |
+| Batch Token UI Rendering | On | Off-screen deferral and effect redraw merging |
 | Chat Messages per Batch | 30 | Requires reload |
 | Preload Upcoming Scenes | 2 | 0 disables |
 | Preload Video Files | Off | |
@@ -106,8 +131,8 @@ Download this repository as a zip and extract it into your Foundry data folder's
 Then rename the extracted folder to `performance-overhaul`, which must match the module id. Restart Foundry
 and enable **Performance Overhaul** in **Manage Modules**.
 
-libWrapper is optional. When it's active, Performance Overhaul registers its one permanent patch
-(`CanvasAnimation.animate`) through it.
+libWrapper is optional. When it's active, Performance Overhaul registers its permanent patches
+(`CanvasAnimation.animate`, and `drawBars` / `drawEffects` on the system's token class) through it.
 
 ## Publishing a release
 
@@ -131,6 +156,8 @@ files to it. Either way, the manifest URL above then serves the newest release.
 
 - Idle and background throttling make animated lights, weather, and remote cursors less smooth while you
   aren't interacting with the map. That's the trade-off; raise the idle rate if it bothers you.
+- If a system or module draws bars or effect icons from data the caches don't see, and they look out of
+  date, turn off the matching cache setting.
 - The profiler measures synchronous work only. Work a handler starts asynchronously isn't counted.
 - Window render times are wall-clock times and include waiting for data and templates.
 - The API is available at `game.modules.get("performance-overhaul").api`.
